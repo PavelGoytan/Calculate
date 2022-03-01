@@ -1,13 +1,14 @@
 package by.training.hoitan.calculator.service;
 
 import by.training.hoitan.calculator.constant.RegularExp;
+
 import java.util.regex.Matcher;
 
 public class Validator {
-    private final String expression;
+    private String expression;
 
-    public Validator(String expression) {
-        this.expression = expression;
+    public Validator() {
+
     }
 
     public boolean checkHaveLetter() {
@@ -53,5 +54,9 @@ public class Validator {
             throw new RuntimeException("UNCORRECTED EXPRESSION");
         }
         return stringBuilder;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
     }
 }

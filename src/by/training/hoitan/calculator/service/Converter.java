@@ -23,18 +23,35 @@ public class Converter {
         return component;
     }
 
-    //-2+3*2-4
+    public String multiplyByMinus(String s) {
+        StringBuilder stringBuilder = new StringBuilder(s);
+        Matcher matcher = RegularExp.signMultSub.matcher(stringBuilder);
+        while (matcher.find()) {
+            int start = matcher.start();
+            int end = matcher.end();
+            stringBuilder.replace(start, end, "-" + matcher.group()
+                    .replaceAll("\\*-", "*")
+                    .replaceAll("/-", "/"));
+            matcher.reset();
+        }
+        return stringBuilder.toString();
+    }
+
+    //-2+3*-2-4
     public List<String> componentDivAddMulSub(String s) {
-        String s2 = s.replaceAll("--", "+").replaceAll("\\+-", "-");
-        String[] split = s2.split("[+-]");
-        if (s2.startsWith("+") || s2.startsWith("-")) {
+        String multiplyByMinus = multiplyByMinus(s);
+        String expression = multiplyByMinus
+                .replaceAll("--", "+")
+                .replaceAll("\\+-", "-");
+        String[] split = expression.split("[+-]");
+        if (expression.startsWith("+") || expression.startsWith("-")) {
             split[0] = "0";
         }
         List<String> component = new ArrayList<>(Arrays.asList(split));
         this.count = component.size();
-        for (int i = 0; i < s2.length(); i++) {
-            if (s2.charAt(i) == '+' || s2.charAt(i) == '-') {
-                component.add(String.valueOf(s2.charAt(i)));
+        for (int i = 0; i < expression.length(); i++) {
+            if (expression.charAt(i) == '+' || expression.charAt(i) == '-') {
+                component.add(String.valueOf(expression.charAt(i)));
             }
         }
         return component;

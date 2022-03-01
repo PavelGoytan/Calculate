@@ -6,21 +6,23 @@ import by.training.hoitan.calculator.operation.DivisionMultiply;
 import by.training.hoitan.calculator.service.ArithmeticExp;
 import by.training.hoitan.calculator.service.Converter;
 import by.training.hoitan.calculator.service.Validator;
+
 import java.util.regex.Matcher;
 
 public class Calculate {
     private final ArithmeticExp arithmeticExp;
     private final Validator validator;
 
-    public Calculate(String expression) {
+    public Calculate() {
         Converter converter = new Converter();
         DivisionMultiply div = new DivisionMultiply();
         AdditionSubtraction add = new AdditionSubtraction(converter);
         this.arithmeticExp = new ArithmeticExp(add, div, converter);
-        this.validator = new Validator(expression);
+        this.validator = new Validator();
     }
 
-    public String solveExpression() {
+    public String solveExpression(String expression) {
+        validator.setExpression(expression);
         StringBuilder stringBuilder = validator.wrightExpression();
         Matcher matcher = RegularExp.expressionInBracket.matcher(stringBuilder);
         while (stringBuilder.toString().contains("(")) {
@@ -29,7 +31,7 @@ public class Calculate {
                 int end = matcher.end();
                 stringBuilder.replace(start, end, arithmeticExp
                         .resultComplexExpression(matcher.group()
-                        .replaceAll("[()]", "")));
+                                .replaceAll("[()]", "")));
                 matcher.reset();
             }
         }
